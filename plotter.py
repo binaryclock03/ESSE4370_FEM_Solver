@@ -37,6 +37,7 @@ def plot_model_setup(model:GlobalGroup):
         direction = direction/np.linalg.norm(direction) 
         plt.arrow(force_node.node_coordinates[0], force_node.node_coordinates[1], direction[0]*force_scale, direction[1]*force_scale, color = 'r', shape = 'full', head_width = 0.2, head_length = 0.2)
 
+    plt.title("Viewing model setup")
     plt.axis = 'equal'
     plt.show()
 
@@ -67,6 +68,7 @@ def plot_model_output(model:GlobalGroup, model2:GlobalGroup):
 
         plt.plot([node_1_pos[0], node_2_pos[0]], [node_1_pos[1], node_2_pos[1]], line2_params)
 
+    plt.title("Viewing displacement")
     plt.axis = 'equal'
     plt.show()
 
