@@ -69,3 +69,13 @@ def plot_model_output(model:GlobalGroup, model2:GlobalGroup):
 
     plt.axis = 'equal'
     plt.show()
+
+def console_output_displacements(model:GlobalGroup):
+    displacements = model.find_nodal_displacements()
+    row_tracker = model.row_tracker
+
+    dof_string_dict = {0:"x", 1:"y", 2:"rotation"}
+
+    print("\n-Nodal Displacements-")
+    for index, row in enumerate(row_tracker):
+        print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + str(displacements[index]))
