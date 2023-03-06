@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from FEM_stuff.model import GlobalGroup
 
-def plot_model(model:GlobalGroup):
+def plot_model_setup(model:GlobalGroup):
     node_color = 'lime'
     node_marker = 'o' 
     bc_color = node_color
@@ -40,7 +40,7 @@ def plot_model(model:GlobalGroup):
     plt.axis = 'equal'
     plt.show()
 
-def plot_model2(model:GlobalGroup, model2:GlobalGroup):
+def plot_model_output(model:GlobalGroup, model2:GlobalGroup):
     node_color = '#c7c7c7'
     node2_color = '#2596be'
     node_marker = 'o' 
