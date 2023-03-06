@@ -5,7 +5,7 @@ linespace = "-------------"
 
 print(linespace)
 print("Loading Model")
-model = fr.load_model("setups/setup_project.yaml")
+model = fr.load_model("setups/setup_ass1.yaml")
 print("Load Complete")
 
 print(linespace)

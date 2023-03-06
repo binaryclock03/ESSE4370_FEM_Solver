@@ -21,4 +21,5 @@ class Node():
         self.node_coordinates[0] = x
 
     def apply_displacement(self, value:float, dof:int, scale:float=1):
-        self.node_coordinates[dof] += (value * scale)
+        if dof != 2:
+            self.node_coordinates[dof] += (value * scale)
