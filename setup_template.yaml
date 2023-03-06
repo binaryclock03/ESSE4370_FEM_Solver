@@ -1,0 +1,38 @@
+---
+materials:
+  - id: 0
+    name: steel
+    youngs_modulus: 210000000000
+    yield_strength: 250000000
+    density: 7850
+
+shape_profiles:
+  - id: 0
+    name: shape_profile_1
+    shape_profile_type: ShapeProfileArea
+    parameters:
+      area: 0.003
+
+nodes:
+  - id: 0
+    position: [0,0]
+  
+  - id: 1
+    position: [0,1]
+
+elements:
+  - id: 0
+    node_ids: [0, 1]
+    element_type: Bar_Element
+    material: steel
+    shape_profile: shape_profile_1
+
+boundary_conditions:
+  - id: 0
+    node_id: 0
+    dof: [0, 0, 0]
+
+loads:
+  - id: 0
+    node_id: 0
+    force: [0, 0, 0]
