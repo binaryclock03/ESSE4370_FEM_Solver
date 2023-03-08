@@ -12,12 +12,16 @@ class GlobalGroup():
     load_dict: dict[int, Load]
 
     global_stiffness_matrix: np.array
+    force_vector: np.array
     node_id_index_dict: dict
     node_index_id_dict: dict
     row_tracker: np.array
 
-    bounded_global_stiffness_matrix: np.array
-    bounded_row_tracker: np.array
+    solver_global_stiffness_matrix: np.array
+    solver_force_vector: np.array
+    solver_row_tracker: np.array
+
+    displacements: np.array
 
     def __init__(self):
         self.element_dict = {}
@@ -43,7 +47,10 @@ class GlobalGroup():
             if  self.node_dict:
                 id = max(self.node_dict.keys()) + 1
 
-        self.node_dict.update({id: Node(node_coordinates=np.array(position), id=id)})
+        if len(position) == 3:
+            self.node_dict.update({id: Node(node_coordinates=np.array(position), id=id)})
+        else:
+            self.node_dict.update({id: Node(node_coordinates=np.array([position[0], position[1], 0]), id=id)})
 
     def add_boundary_condition(self, node_id:int, dof:tuple, id:int = -1):
         if id == -1:
@@ -155,14 +162,14 @@ class GlobalGroup():
                     row_tracker = np.delete(row_tracker, node_pos + i, 0)
                     force_vector = np.delete(force_vector, node_pos + i, 0)
         
-        self.bounded_global_stiffness_matrix = bgsm
-        self.row_tracker = row_tracker
-        self.force_vector = force_vector
+        self.solver_global_stiffness_matrix = bgsm
+        self.solver_row_tracker = row_tracker
+        self.solver_force_vector = force_vector
 
     def optimize_bounded_global_stiffness_matrix(self):
-        bgsm = self.bounded_global_stiffness_matrix
-        row_tracker = self.row_tracker
-        force_vector = self.force_vector
+        bgsm = self.solver_global_stiffness_matrix
+        row_tracker = self.solver_row_tracker
+        force_vector = self.solver_force_vector
 
         #search through matrix and find all zero rows/columns and delete them as they are not needed for solution
         to_delete = []
@@ -179,28 +186,20 @@ class GlobalGroup():
                 to_delete.append(i)
         bgsm = np.delete(bgsm, to_delete, 1)
 
-        self.bounded_global_stiffness_matrix = bgsm
-        self.row_tracker = row_tracker
-        self.force_vector = force_vector
+        self.solver_global_stiffness_matrix = bgsm
+        self.solver_row_tracker = row_tracker
+        self.solver_force_vector = force_vector
 
     def find_nodal_displacements(self):
-        return np.matmul(np.linalg.inv(self.bounded_global_stiffness_matrix), self.force_vector)
-    
-    def return_solved_model(self, scale = 100):
-        displacements = self.find_nodal_displacements()
-        row_tracker = self.row_tracker
-        solved_model = GlobalGroup()
-
-        for node in self.node_dict.values():
-            solved_model.add_node(node.node_coordinates, id=node.id)
-
-        for element in self.element_dict.values():
-            solved_model.add_element(element_class=type(element), node1_id=element.node_1.id, node2_id=element.node_2.id)
-
-        for row_index, node_dof_pair in enumerate(row_tracker):
-            solved_model.get_node(int(node_dof_pair[0])).apply_displacement(displacements[row_index], int(node_dof_pair[1]), scale=scale)
-
-        return solved_model
+        self.displacements = np.zeros((len(self.row_tracker)))
+        solved_displacements = np.matmul(np.linalg.inv(self.solver_global_stiffness_matrix), self.solver_force_vector)
+        
+        for row_index, node_dof_pair in enumerate(self.solver_row_tracker):
+            index_1 = np.where(self.row_tracker[:,0] == node_dof_pair[0])
+            index_2 = np.where(self.row_tracker[:,1] == node_dof_pair[1])
+            index = int(np.intersect1d(index_1, index_2)[0])
+            self.displacements[index] = solved_displacements[row_index]
+            self.get_node(int(node_dof_pair[0])).displacement[int(node_dof_pair[1])] = solved_displacements[row_index]
     
     def find_mass(self):
         mass = 0

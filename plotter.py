@@ -41,7 +41,7 @@ def plot_model_setup(model:GlobalGroup):
     plt.axis('equal')
     plt.show()
 
-def plot_model_output(model:GlobalGroup, model2:GlobalGroup):
+def plot_model_displacements(model:GlobalGroup, scale:float = 1):
     node_color = '#c7c7c7'
     node2_color = '#2596be'
     node_marker = 'o' 
@@ -51,33 +51,39 @@ def plot_model_output(model:GlobalGroup, model2:GlobalGroup):
     
     for node in model.node_dict.values():
         plt.plot(node.node_coordinates[0], node.node_coordinates[1], color = node_color, marker = node_marker, zorder=100)
+        plt.plot(node.get_displaced_coordinates(scale = scale)[0], node.get_displaced_coordinates(scale = scale)[1], color = node2_color, marker = node2_marker, zorder=200)
 
     for element in model.element_dict.values():
         node_1_pos = element.node_1.node_coordinates
         node_2_pos = element.node_2.node_coordinates
 
+        node_disp_1_pos = element.node_1.get_displaced_coordinates(scale = scale)
+        node_disp_2_pos = element.node_2.get_displaced_coordinates(scale = scale)
+
         plt.plot([node_1_pos[0], node_2_pos[0]], [node_1_pos[1], node_2_pos[1]], line_params)
-
-
-    for node in model2.node_dict.values():
-        plt.plot(node.node_coordinates[0], node.node_coordinates[1], color = node2_color, marker = node2_marker, zorder=200)
-    
-    for element in model2.element_dict.values():
-        node_1_pos = element.node_1.node_coordinates
-        node_2_pos = element.node_2.node_coordinates
-
-        plt.plot([node_1_pos[0], node_2_pos[0]], [node_1_pos[1], node_2_pos[1]], line2_params)
+        plt.plot([node_disp_1_pos[0], node_disp_2_pos[0]], [node_disp_1_pos[1], node_disp_2_pos[1]], line2_params)
 
     plt.title("Viewing displacement")
     plt.axis('equal')
     plt.show()
 
 def console_output_displacements(model:GlobalGroup):
-    displacements = model.find_nodal_displacements()
+    displacements = model.displacements
     row_tracker = model.row_tracker
 
     dof_string_dict = {0:"x", 1:"y", 2:"rotation"}
 
     print("\n-Nodal Displacements-")
     for index, row in enumerate(row_tracker):
-        print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + str(displacements[index]))
+        print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="m"))
+
+def eng_notation(value:float, base_unit:str = "") -> str:
+    from math import floor, log10
+    prefix_dict = {0:"", 1:"k", 2:"M", 3:"G", 4:"T", 5:"P", 6:"E", -1:"m", -2:"u", -3:"n", -4:"p", -5:"f", -6:"a"}
+
+    if value != 0:
+        prefix_n = floor((log10(abs(value)))/3)
+    else:
+        prefix_n = 0
+
+    return str(round(value/(1000**prefix_n), 3)) + " " + prefix_dict.get(prefix_n) + base_unit
