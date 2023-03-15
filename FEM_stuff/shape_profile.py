@@ -26,6 +26,7 @@ class ShapeProfileRoundBar(ShapeProfileRoundTubing):
 
 class ShapeProfileSquareTubing(ShapeProfile):
     def __init__(self, name = "default_square_tubing", width = 1, height = 1, w_thickness = 0.1, h_thickness = 0.1):
+        self.name = name
         self.width = width
         self.height = height
         self.w_thickness = w_thickness
@@ -36,7 +37,7 @@ class ShapeProfileSquareTubing(ShapeProfile):
 
 class ShapeProfileSquareBar(ShapeProfileSquareTubing):
     def __init__(self, name = "default_square_bar", width = 1, height = 1):
-        super().__init__(self, name=name, width = width, height = height, h_thickness=height, w_thickness=width)
+        super().__init__(name=name, width = width, height = height, h_thickness=height, w_thickness=width)
 
 # class ShapeProfileTBeam(ShapeProfile):
 

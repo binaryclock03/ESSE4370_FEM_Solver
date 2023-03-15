@@ -75,6 +75,8 @@ def console_output_displacements(model:GlobalGroup):
 
     print("\n-Nodal Displacements-")
     for index, row in enumerate(row_tracker):
+        if row[1] == 2:
+            print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="Rad"))
         print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="m"))
 
 def eng_notation(value:float, base_unit:str = "") -> str:
@@ -86,4 +88,6 @@ def eng_notation(value:float, base_unit:str = "") -> str:
     else:
         prefix_n = 0
 
-    return str(round(value/(1000**prefix_n), 3)) + " " + prefix_dict.get(prefix_n) + base_unit
+    if prefix_n in prefix_dict.keys():
+        return str(round(value/(1000**prefix_n), 3)) + " " + prefix_dict.get(prefix_n) + base_unit
+    return value

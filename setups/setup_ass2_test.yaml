@@ -1,0 +1,74 @@
+---
+materials:
+  - id: 0
+    name: steel
+    youngs_modulus: 210000000000
+    yield_strength: 250000000
+    density: 7850
+
+shape_profiles:
+  - id: 0
+    name: shape_profile_1
+    shape_profile_type: ShapeProfileSquareBar
+    parameters:
+      width: 0.1
+      height: 0.05
+
+nodes:
+  - id: 1
+    position: [-2,2]
+
+  - id: 4
+    position: [-1,2]
+  
+  - id: 2
+    position: [0,2]
+
+  - id: 5
+    position: [0,1]
+
+  - id: 3
+    position: [0,0]
+
+elements:
+  - id: 0
+    node_ids: [1, 4]
+    element_type: Beam_Element
+    material: steel
+    shape_profile: shape_profile_1
+  
+  - id: 1
+    node_ids: [4, 2]
+    element_type: Beam_Element
+    material: steel
+    shape_profile: shape_profile_1
+
+  - id: 2
+    node_ids: [2, 5]
+    element_type: Beam_Element
+    material: steel
+    shape_profile: shape_profile_1
+
+  - id: 3
+    node_ids: [5, 3]
+    element_type: Beam_Element
+    material: steel
+    shape_profile: shape_profile_1
+
+boundary_conditions:
+  - id: 0
+    node_id: 3
+    dof: [0, 0, 0]
+
+loads:
+  - id: 0
+    node_id: 1
+    force: [0, -500, -83.33]
+
+  - id: 1
+    node_id: 4
+    force: [0, -1000, 0]
+
+  - id: 2
+    node_id: 2
+    force: [0, -500, 83.33]

@@ -6,10 +6,10 @@ from FEM_stuff.boundary_condition import *
 from FEM_stuff.load import *
 
 class GlobalGroup():
-    element_dict: dict[int, Element2D]
-    node_dict: dict[int, Node]
-    boundary_dict: dict[int, BoundaryCondition]
-    load_dict: dict[int, Load]
+    element_dict: dict
+    node_dict: dict
+    boundary_dict: dict
+    load_dict: dict
 
     global_stiffness_matrix: np.array
     force_vector: np.array

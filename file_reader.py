@@ -97,3 +97,6 @@ def load_shape_profile(shape, args):
 
     if shape_profile_type_str == "ShapeProfileArea":
         shape_profile_dict.update({name:ShapeProfileArea(name = name,area = parameters.get('area'))})
+    
+    if shape_profile_type_str == "ShapeProfileSquareBar":
+        shape_profile_dict.update({name:ShapeProfileSquareBar(name = name, width = parameters.get('width'), height = parameters.get('height'))})
