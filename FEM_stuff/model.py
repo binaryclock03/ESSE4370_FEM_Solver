@@ -39,7 +39,7 @@ class GlobalGroup():
             if  self.element_dict:
                 id = max(self.element_dict.keys()) + 1
 
-        self.element_dict.update({id: element_class(self.node_dict.get(node1_id), self.node_dict.get(node2_id))})
+        self.element_dict.update({id: element_class(self.node_dict.get(node1_id), self.node_dict.get(node2_id), id=id)})
 
     def add_node(self, position: tuple, id:int = -1):
         if id == -1:
@@ -89,6 +89,10 @@ class GlobalGroup():
     def regenerate_elements_all(self):
         for element_id in self.element_dict:
             self.element_dict.get(element_id).regenerate_all()
+
+    def post_procces(self):
+        for element_id in self.element_dict:
+            self.element_dict.get(element_id).post_procces()
 
     def assemble_global_stiffness_matrix(self):
         self.regenerate_elements_all()
@@ -200,6 +204,11 @@ class GlobalGroup():
             index = int(np.intersect1d(index_1, index_2)[0])
             self.displacements[index] = solved_displacements[row_index]
             self.get_node(int(node_dof_pair[0])).displacement[int(node_dof_pair[1])] = solved_displacements[row_index]
+
+    def find_stresses(self):
+        for elem in self.element_dict.values():
+            elem.compute_stress_arr()
+        pass
     
     def find_mass(self):
         mass = 0
@@ -213,3 +222,6 @@ class GlobalGroup():
         self.apply_loads()
         self.apply_boundary_conditions()
         self.optimize_bounded_global_stiffness_matrix()
+    
+    def post_procces(self):
+        self.find_stresses()
