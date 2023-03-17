@@ -84,7 +84,9 @@ def console_output_stresses(model:GlobalGroup):
     print("\n-Element Stresses-")
     for element in model.element_dict.values():
         for stress_num, stress in enumerate(element.stress):
-            print("Element " + str(element.id) + " stress " + str(stress_num) + " " + str(stress))
+            print("Element " + str(element.id) + " stress " + str(stress_num) + " (" 
+                  + eng_notation(stress[0], "Pa") + ", "
+                  + eng_notation(stress[1], "Pa") + ")")
 
 def eng_notation(value:float, base_unit:str = "") -> str:
     from math import floor, log10
