@@ -41,6 +41,7 @@ def load_node(node, args):
     model.add_node(position, id=id)
 
 def load_element(element, args):
+    id = element.get('id')
     model:GlobalGroup = args[0]
     material_dict:dict = args[1]
     shape_dict:dict = args[2]

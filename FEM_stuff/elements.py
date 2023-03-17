@@ -7,6 +7,7 @@ import FEM_stuff.material as mt
 from FEM_stuff.math_util import apply_element_rotation, apply_coordinate_rotaton
 
 class Element2D():
+    id: int
     length: float
     angle_to_x: float
     tangent_vector: np.array
@@ -16,7 +17,8 @@ class Element2D():
     shape_profile: sp.ShapeProfile
     material: mt.Material
 
-    def __init__(self, node_1: nd.Node, node_2: nd.Node):
+    def __init__(self, node_1: nd.Node, node_2: nd.Node, id=0):
+        self.id = id
         self.node_1 = node_1
         self.node_2 = node_2
         self.regenerate_node_geometry()
@@ -49,7 +51,7 @@ class Element2D():
         pass
 
     def get_e_stiff_mat_global_coords(self) -> np.array:
-        return apply_element_rotation(self.element_stiffness_matrix, self.angle_to_x)
+        return apply_element_rotation(self.element_stiffness_matrix, -self.angle_to_x)
 
     def get_stress_arr(self, x_dim = 1, y_dim = 1) -> np.array:
         array = np.zeros((x_dim, y_dim, 3))
@@ -69,11 +71,15 @@ class Bar_Element(Element2D):
     
     def get_stress_arr(self, x_dim=1, y_dim=1) -> np.array:
         array = np.zeros((1, 1, 3))
-        displacement = self.node_2.displacement - self.node_1.displacement
-        print(displacement)
-        displacement = apply_coordinate_rotaton(displacement, -self.angle_to_x)
-        print(displacement)
-        #array[0, 0] = 
+        disp_g = self.node_2.displacement - self.node_1.displacement
+        disp_l = apply_coordinate_rotaton(disp_g, -self.angle_to_x)
+        array[0, 0, 0] = self.material.youngs_modulus * (disp_l[0]/self.length)
+        from plotter import eng_notation
+        print(str(self.id) + " " + eng_notation(array[0, 0, 0]), "Pa")
+        print(disp_g)
+        print(self.angle_to_x)
+        print(disp_l)
+        print("-----------")
         return array
 
 class Beam_Element(Element2D):

@@ -39,7 +39,7 @@ class GlobalGroup():
             if  self.element_dict:
                 id = max(self.element_dict.keys()) + 1
 
-        self.element_dict.update({id: element_class(self.node_dict.get(node1_id), self.node_dict.get(node2_id))})
+        self.element_dict.update({id: element_class(self.node_dict.get(node1_id), self.node_dict.get(node2_id), id=id)})
 
     def add_node(self, position: tuple, id:int = -1):
         if id == -1:

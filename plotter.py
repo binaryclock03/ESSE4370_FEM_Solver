@@ -77,7 +77,8 @@ def console_output_displacements(model:GlobalGroup):
     for index, row in enumerate(row_tracker):
         if row[1] == 2:
             print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="Rad"))
-        print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="m"))
+        else:
+            print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="m"))
 
 def eng_notation(value:float, base_unit:str = "") -> str:
     from math import floor, log10
