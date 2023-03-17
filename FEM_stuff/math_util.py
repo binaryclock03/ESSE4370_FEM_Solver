@@ -17,7 +17,7 @@ def return_element_transformation_matrix(angle):
 
 def apply_coordinate_rotaton(coords, angle):
     T = return_coordinate_transformation_matrix(angle)
-    return np.matmul(np.linalg.inv(T), coords)
+    return np.matmul(T, coords)
 
 def return_coordinate_transformation_matrix(angle):
     c = math.cos(angle)

@@ -90,6 +90,10 @@ class GlobalGroup():
         for element_id in self.element_dict:
             self.element_dict.get(element_id).regenerate_all()
 
+    def post_procces(self):
+        for element_id in self.element_dict:
+            self.element_dict.get(element_id).post_procces()
+
     def assemble_global_stiffness_matrix(self):
         self.regenerate_elements_all()
 
@@ -203,7 +207,7 @@ class GlobalGroup():
 
     def find_stresses(self):
         for elem in self.element_dict.values():
-            elem.get_stress_arr()
+            elem.compute_stress_arr()
         pass
     
     def find_mass(self):
@@ -218,3 +222,6 @@ class GlobalGroup():
         self.apply_loads()
         self.apply_boundary_conditions()
         self.optimize_bounded_global_stiffness_matrix()
+    
+    def post_procces(self):
+        self.find_stresses()

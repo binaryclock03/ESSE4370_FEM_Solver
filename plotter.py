@@ -80,6 +80,12 @@ def console_output_displacements(model:GlobalGroup):
         else:
             print("Node " + str(int(row[0])) + " displaced in " + str(dof_string_dict.get(row[1])) + " by " + eng_notation(displacements[index], base_unit="m"))
 
+def console_output_stresses(model:GlobalGroup):
+    print("\n-Element Stresses-")
+    for element in model.element_dict.values():
+        for stress_num, stress in enumerate(element.stress):
+            print("Element " + str(element.id) + " stress " + str(stress_num) + " " + str(stress))
+
 def eng_notation(value:float, base_unit:str = "") -> str:
     from math import floor, log10
     prefix_dict = {0:"", 1:"k", 2:"M", 3:"G", 4:"T", 5:"P", 6:"E", -1:"m", -2:"u", -3:"n", -4:"p", -5:"f", -6:"a"}
