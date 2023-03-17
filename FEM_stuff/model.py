@@ -200,6 +200,11 @@ class GlobalGroup():
             index = int(np.intersect1d(index_1, index_2)[0])
             self.displacements[index] = solved_displacements[row_index]
             self.get_node(int(node_dof_pair[0])).displacement[int(node_dof_pair[1])] = solved_displacements[row_index]
+
+    def find_stresses(self):
+        for elem in self.element_dict.values():
+            elem.get_stress_arr()
+        pass
     
     def find_mass(self):
         mass = 0

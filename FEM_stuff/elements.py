@@ -4,7 +4,7 @@ import math
 import FEM_stuff.node as nd
 import FEM_stuff.shape_profile as sp
 import FEM_stuff.material as mt
-from FEM_stuff.math_util import apply_rotation
+from FEM_stuff.math_util import apply_element_rotation, apply_coordinate_rotaton
 
 class Element2D():
     length: float
@@ -46,12 +46,14 @@ class Element2D():
             self.angle_to_x = math.atan(self.tangent_vector[1]/self.tangent_vector[0])
 
     def regenerate_stiffness_matrix(self):
-        print("hi")
         pass
 
-    def get_e_stiff_mat_global_coords(self):
-        return apply_rotation(self.element_stiffness_matrix, self.angle_to_x)
+    def get_e_stiff_mat_global_coords(self) -> np.array:
+        return apply_element_rotation(self.element_stiffness_matrix, self.angle_to_x)
 
+    def get_stress_arr(self, x_dim = 1, y_dim = 1) -> np.array:
+        array = np.zeros((x_dim, y_dim, 3))
+        return array
 
 class Bar_Element(Element2D):
     def regenerate_stiffness_matrix(self):
@@ -64,6 +66,15 @@ class Bar_Element(Element2D):
         
         material_part = ((self.material.youngs_modulus * self.shape_profile.area) / self.length)
         self.element_stiffness_matrix = material_part * shape_array    
+    
+    def get_stress_arr(self, x_dim=1, y_dim=1) -> np.array:
+        array = np.zeros((1, 1, 3))
+        displacement = self.node_2.displacement - self.node_1.displacement
+        print(displacement)
+        displacement = apply_coordinate_rotaton(displacement, -self.angle_to_x)
+        print(displacement)
+        #array[0, 0] = 
+        return array
 
 class Beam_Element(Element2D):
     def regenerate_stiffness_matrix(self):
