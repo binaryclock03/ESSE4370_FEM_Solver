@@ -26,3 +26,4 @@ plotter.console_output_stresses(model)
 
 plotter.plot_model_setup(model)
 plotter.plot_model_displacements(model, scale=100)
+plotter.plot_model_displacements(model, scale=100, stress=True)

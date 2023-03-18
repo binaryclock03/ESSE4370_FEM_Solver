@@ -41,14 +41,27 @@ def plot_model_setup(model:GlobalGroup):
     plt.axis('equal')
     plt.show()
 
-def plot_model_displacements(model:GlobalGroup, scale:float = 1):
+def plot_model_displacements(model:GlobalGroup, scale:float = 1, stress = False):
     node_color = '#c7c7c7'
     node2_color = '#2596be'
     node_marker = 'o' 
     node2_marker = 'o' 
-    line_params = node_color
-    line2_params = 'black'
+    line_color = node_color
+    line2_color = 'black'
     
+    if stress:
+        stresses = []
+        for element in model.element_dict.values():
+            stresses.append(element.stress[0][0][0])
+        max_stress = max(stresses)
+        min_stress = min(stresses)
+        range_stress = max_stress-min_stress
+
+        if abs(max_stress) > abs(min_stress):
+            highest_stress = max_stress
+        else:
+            highest_stress = -min_stress
+
     for node in model.node_dict.values():
         plt.plot(node.node_coordinates[0], node.node_coordinates[1], color = node_color, marker = node_marker, zorder=100)
         plt.plot(node.get_displaced_coordinates(scale = scale)[0], node.get_displaced_coordinates(scale = scale)[1], color = node2_color, marker = node2_marker, zorder=200)
@@ -60,10 +73,20 @@ def plot_model_displacements(model:GlobalGroup, scale:float = 1):
         node_disp_1_pos = element.node_1.get_displaced_coordinates(scale = scale)
         node_disp_2_pos = element.node_2.get_displaced_coordinates(scale = scale)
 
-        plt.plot([node_1_pos[0], node_2_pos[0]], [node_1_pos[1], node_2_pos[1]], line_params)
-        plt.plot([node_disp_1_pos[0], node_disp_2_pos[0]], [node_disp_1_pos[1], node_disp_2_pos[1]], line2_params)
+        if stress:
+            color_scale = (element.stress[0][0][0])/highest_stress
+            print(color_scale)
+            if element.stress[0][0][0] < 0:
+                line2_color = '#0000' + hex(int(255*abs(color_scale))).replace("0x", "")
+            if element.stress[0][0][0] > 0:
+                line2_color = '#' + hex(int(255*abs(color_scale))).replace("0x", "") + '0000'
+        
+        plt.plot([node_1_pos[0], node_2_pos[0]], [node_1_pos[1], node_2_pos[1]], color = line_color)
+        plt.plot([node_disp_1_pos[0], node_disp_2_pos[0]], [node_disp_1_pos[1], node_disp_2_pos[1]], color = line2_color)
 
     plt.title("Viewing displacement")
+    if stress:
+        plt.title("Viewing displacement and stresses")
     plt.axis('equal')
     plt.show()
 
@@ -83,7 +106,7 @@ def console_output_displacements(model:GlobalGroup):
 def console_output_stresses(model:GlobalGroup):
     print("\n-Element Stresses-")
     for element in model.element_dict.values():
-        for stress_num, stress in enumerate(element.stress):
+        for stress_num, stress in enumerate(element.stress[0]):
             print("Element " + str(element.id) + " stress " + str(stress_num) + " (" 
                   + eng_notation(stress[0], "Pa") + ", "
                   + eng_notation(stress[1], "Pa") + ")")
