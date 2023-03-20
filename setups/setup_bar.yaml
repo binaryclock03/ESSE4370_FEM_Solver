@@ -1,0 +1,42 @@
+---
+materials:
+  - id: 0
+    name: aluminum
+    youngs_modulus: 69000000000
+    yield_strength: 95000000
+    density: 2700
+
+shape_profiles:
+  - id: 0
+    name: shape_profile_1
+    shape_profile_type: ShapeProfileArea
+    parameters:
+      area: 0.000106
+
+nodes:
+  - id: 0
+    position: [0,0]
+  
+  - id: 1
+    position: [1,0]
+
+elements:
+  - id: 0
+    node_ids: [0, 1]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+boundary_conditions:
+  - id: 0
+    node_id: 0
+    dof: [0, 0, 0]
+  
+  - id: 1
+    node_id: 1
+    dof: [1, 0, 0]
+
+loads:
+  - id: 0
+    node_id: 1
+    force: [10000, 0, 0]
