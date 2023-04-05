@@ -17,7 +17,7 @@ shape_profiles:
     name: shape_profile_1
     shape_profile_type: ShapeProfileArea
     parameters:
-      area: 0.00015
+      area: 0.00012
 
 nodes:
   # this is a comment
@@ -34,10 +34,10 @@ nodes:
     position: [1, 0]
   
   - id: 30
-    position: [1.5, 0.1]
+    position: [1.5, 0.04]
 
   - id: 31
-    position: [1.5, 0.05]
+    position: [1.5, -0.04]
 
   - id: 2
     position: [2, 0]
@@ -168,6 +168,12 @@ elements:
 
   - id: 24
     node_ids: [21, 4]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 25
+    node_ids: [1, 5]
     element_type: Bar_Element
     material: aluminum
     shape_profile: shape_profile_1

@@ -50,12 +50,13 @@ elements:
     element_type: Bar_Element
     material: aluminum
     shape_profile: shape_profile_1
-
+  
   - id: 14
     node_ids: [11, 1]
     element_type: Bar_Element
     material: aluminum
     shape_profile: shape_profile_1
+
 
 boundary_conditions:
   - id: 0
