@@ -1,4 +1,3 @@
-import copy
 import numpy as np
 from FEM_stuff.elements import *
 from FEM_stuff.node import *
@@ -22,6 +21,7 @@ class GlobalGroup():
     solver_row_tracker: np.array
 
     displacements: np.array
+    reaction_forces: np.array
 
     def __init__(self):
         self.element_dict = {}
@@ -209,6 +209,17 @@ class GlobalGroup():
         for elem in self.element_dict.values():
             elem.compute_stress_arr()
         pass
+
+    def find_reaction_forces(self):
+        self.reaction_forces = np.zeros((len(self.row_tracker)))
+        
+        bc_nodes = []
+        for bc in self.boundary_dict.values():
+            bc_nodes.append(bc.node_id)
+            indexs = np.where(self.row_tracker[:,0] == bc.node_id)
+            self.reaction_forces[indexs] = np.matmul(self.global_stiffness_matrix[indexs,:], self.displacements)
+
+        print(self.reaction_forces)
     
     def find_mass(self):
         mass = 0
@@ -225,3 +236,4 @@ class GlobalGroup():
     
     def post_procces(self):
         self.find_stresses()
+        self.find_reaction_forces()
