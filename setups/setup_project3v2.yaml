@@ -1,0 +1,201 @@
+---
+materials:
+  - id: 0
+    name: steel
+    youngs_modulus: 200000000000
+    yield_strength: 250000000
+    density: 7850
+  
+  - id: 1
+    name: aluminum
+    youngs_modulus: 69000000000
+    yield_strength: 95000000
+    density: 2700
+
+shape_profiles:
+  - id: 0
+    name: shape_profile_1
+    shape_profile_type: ShapeProfileArea
+    parameters:
+      area: 0.00012
+
+nodes:
+  # this is a comment
+  - id: 0
+    position: [0, 0.05]
+
+  - id: 10
+    position: [0.5, 0.05]
+
+  - id: 11
+    position: [0.5, 0]
+
+  - id: 1
+    position: [1, 0]
+  
+  - id: 30
+    position: [1.5, 0.04]
+
+  - id: 31
+    position: [1.5, -0.04]
+
+  - id: 2
+    position: [2, 0]
+  
+  - id: 3
+    position: [3, 0]
+
+  - id: 4
+    position: [0, 1]
+
+  - id: 20
+    position: [0.51, 0.825]
+  
+  - id: 21
+    position: [0.49, 0.775]
+  
+  - id: 5
+    position: [1, 0.6]
+
+elements:
+  - id: 0
+    node_ids: [0, 10]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 10
+    node_ids: [0, 11]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 11
+    node_ids: [10, 11]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 12
+    node_ids: [10, 1]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 13
+    node_ids: [11, 1]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 1
+    node_ids: [1, 30]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 31
+    node_ids: [1, 31]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 32
+    node_ids: [30, 31]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 33
+    node_ids: [30, 2]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 34
+    node_ids: [31, 2]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 2
+    node_ids: [2, 3]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 4
+    node_ids: [5, 2]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+    
+  - id: 5
+    node_ids: [5, 3]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+    
+  - id: 6
+    node_ids: [4, 1]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+    
+  - id: 7
+    node_ids: [5, 20]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 21
+    node_ids: [5, 21]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 22
+    node_ids: [20, 21]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 23
+    node_ids: [20, 4]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+  - id: 24
+    node_ids: [21, 4]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+  
+  - id: 25
+    node_ids: [1, 5]
+    element_type: Bar_Element
+    material: aluminum
+    shape_profile: shape_profile_1
+
+loads:
+  - id: 0
+    node_id: 1
+    force: [0, -3000, 0]
+  
+  - id: 1
+    node_id: 2
+    force: [0, -3000, 0]
+
+  - id: 2
+    node_id: 3
+    force: [0, -3000, 0]
+
+boundary_conditions:
+  - id: 0
+    node_id: 0
+    dof: [0, 0, 0]
+
+  - id: 1
+    node_id: 4
+    dof: [0, 0, 0]

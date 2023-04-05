@@ -55,7 +55,7 @@ class Element2D():
         return apply_element_rotation(self.element_stiffness_matrix, -self.angle_to_x)
 
     def calculate_stress_arr(self, x_dim = 1, y_dim = 1) -> np.array:
-        array = np.zeros((x_dim, y_dim, 3))
+        array = np.zeros((x_dim, y_dim, 2))
         self.stress = array
 
     def post_procces(self):
@@ -74,7 +74,7 @@ class Bar_Element(Element2D):
         self.element_stiffness_matrix = material_part * shape_array    
     
     def compute_stress_arr(self, x_dim=1, y_dim=1):
-        array = np.zeros((1, 1, 3))
+        array = np.zeros((1, 1, 2))
         disp_g = self.node_2.displacement - self.node_1.displacement
         disp_l = apply_coordinate_rotaton(disp_g, -self.angle_to_x)
         array[0, 0, 0] = self.material.youngs_modulus * (disp_l[0]/self.length)
